@@ -72,26 +72,80 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem: SearchProblem):
+def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
-
-    Your search algorithm needs to return a list of actions that reaches the
-    goal. Make sure to implement a graph search algorithm.
-
-    To get started, you might want to try some of these simple commands to
-    understand the search problem that is being passed in:
     """
-    print("Start:", problem.getStartState())
-    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
-    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
-    "*** YOUR CODE HERE ***"
+    visited = {}
+    solution = []
+    stack = util.Stack()
+    route = {}
+
+    start = problem.getStartState()
+    stack.push((start, '', 0))
+    visited[start] = ''
+    if problem.isGoalState(start):
+        return solution
+
+    goal = False
+    while not (stack.isEmpty() or goal):
+        vertex = stack.pop()
+        visited[vertex[0]] = vertex[1]
+        if problem.isGoalState(vertex[0]):
+            child = vertex[0]
+            goal = True
+            break
+        for i in problem.getSuccessors(vertex[0]):
+            if i[0] not in visited.keys():
+                route[i[0]] = vertex[0]
+                stack.push(i)
+
+    while(child in route.keys()):
+        parent = route[child]
+        solution.insert(0, visited[child])
+        child = parent
+
+    return solution
     util.raiseNotDefined()
 
-def breadthFirstSearch(problem: SearchProblem):
+def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
+    visited = {}
+    solution = []
+    queue = util.Queue()
+    route = {}
+    flag = False
+
+    start = problem.getStartState()
+    if problem.isGoalState(start):
+      return solution
+    queue.push((start, 'None', 0))
+    visited[start] = 'None'
+
+    while not (queue.isEmpty() or flag):
+      vertex = queue.pop()
+      visited[vertex[0]] = vertex[1]
+      if problem.isGoalState(vertex[0]):
+        child = vertex[0]
+        flag = True
+        break
+      
+      for i in problem.getSuccessors(vertex[0]):
+        if i[0] not in visited.keys() and i[0] not in route.keys():
+          route[i[0]] = vertex[0]
+          queue.push(i)
+    
+    while (child in route.keys()):
+      parent = route[child]
+      solution.insert(0, visited[child])
+      child = parent
+    
+    return solution
+    if problem.isGoalState(start):
+      return solution
     util.raiseNotDefined()
+
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""
