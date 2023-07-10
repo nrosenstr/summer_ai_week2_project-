@@ -820,4 +820,3 @@ class CornerHeuristicPacman(testClasses.TestCase):
         handle.write('thresholds: "2000 1600 1200"\n')
         handle.close()
         return True
-

@@ -1,5 +1,3 @@
-from search import generic_search
-
 # searchAgents.py
 # ---------------
 # Licensing Information:  You are free to use or extend these projects for

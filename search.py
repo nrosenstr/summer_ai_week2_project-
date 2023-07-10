@@ -72,80 +72,87 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def depthFirstSearch(problem):
+def depthFirstSearch(problem: SearchProblem):
     """
     Search the deepest nodes in the search tree first.
+
+    Your search algorithm needs to return a list of actions that reaches the
+    goal. Make sure to implement a graph search algorithm.
+
+    To get started, you might want to try some of these simple commands to
+    understand the search problem that is being passed in:
     """
+    print("Start:", problem.getStartState())
+    print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+
     visited = {}
     solution = []
     stack = util.Stack()
-    route = {}
+    path = {}
 
-    start = problem.getStartState()
-    stack.push((start, '', 0))
-    visited[start] = ''
-    if problem.isGoalState(start):
+    start_state = problem.getStartState()
+    stack.push((start_state, '', 0))
+    visited[start_state] = ''
+    if problem.isGoalState(start_state):
         return solution
 
-    goal = False
-    while not (stack.isEmpty() or goal):
-        vertex = stack.pop()
-        visited[vertex[0]] = vertex[1]
-        if problem.isGoalState(vertex[0]):
-            child = vertex[0]
-            goal = True
+    goal_found = False
+    while not (stack.isEmpty() or goal_found):
+        current_state, action, _ = stack.pop()
+        visited[current_state] = action
+        if problem.isGoalState(current_state):
+            child_state = current_state
+            goal_found = True
             break
-        for i in problem.getSuccessors(vertex[0]):
-            if i[0] not in visited.keys():
-                route[i[0]] = vertex[0]
-                stack.push(i)
+        for successor in problem.getSuccessors(current_state):
+            if successor[0] not in visited.keys():
+                path[successor[0]] = current_state
+                stack.push(successor)
 
-    while(child in route.keys()):
-        parent = route[child]
-        solution.insert(0, visited[child])
-        child = parent
+    while child_state in path.keys():
+        parent_state = path[child_state]
+        solution.insert(0, visited[child_state])
+        child_state = parent_state
 
     return solution
-    util.raiseNotDefined()
+
 
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
     visited = {}
     solution = []
     queue = util.Queue()
-    route = {}
-    flag = False
+    path = {}
+    goal_reached = False
 
-    start = problem.getStartState()
-    if problem.isGoalState(start):
-      return solution
-    queue.push((start, 'None', 0))
-    visited[start] = 'None'
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
+        return solution
+    queue.push((start_state, 'None', 0))
+    visited[start_state] = 'None'
 
-    while not (queue.isEmpty() or flag):
-      vertex = queue.pop()
-      visited[vertex[0]] = vertex[1]
-      if problem.isGoalState(vertex[0]):
-        child = vertex[0]
-        flag = True
-        break
-      
-      for i in problem.getSuccessors(vertex[0]):
-        if i[0] not in visited.keys() and i[0] not in route.keys():
-          route[i[0]] = vertex[0]
-          queue.push(i)
-    
-    while (child in route.keys()):
-      parent = route[child]
-      solution.insert(0, visited[child])
-      child = parent
-    
+    while not (queue.isEmpty() or goal_reached):
+        current_state, action, _ = queue.pop()
+        visited[current_state] = action
+        if problem.isGoalState(current_state):
+            child_state = current_state
+            goal_reached = True
+            break
+
+        for successor in problem.getSuccessors(current_state):
+            if successor[0] not in visited.keys() and successor[0] not in path.keys():
+                path[successor[0]] = current_state
+                queue.push(successor)
+
+    while child_state in path.keys():
+        parent_state = path[child_state]
+        solution.insert(0, visited[child_state])
+        child_state = parent_state
+
     return solution
-    if problem.isGoalState(start):
-      return solution
-    util.raiseNotDefined()
 
+    
+    
 
 def uniformCostSearch(problem: SearchProblem):
     """Search the node of least total cost first."""

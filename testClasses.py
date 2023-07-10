@@ -203,4 +203,3 @@ class TestCase(object):
 
     def addMessage(self, message):
         self.messages.extend(message.split('\n'))
-
