@@ -1,0 +1,1 @@
+For this project I had a lot of trouble with where to begin. I did not know how to code bfs and dfs in python. I was able to apply the lesson in class about child and parent nodes along with using .pop.
